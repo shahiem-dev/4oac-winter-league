@@ -1,1 +1,37 @@
-angler_id,first_name,surname,initials,club
+angler_id,wp_no,first_name,surname,initials,club,division
+shahiem_adams,WP481,Shahiem,Adams,SA,FOUR OCEANS,M
+adiel_behardien,WP324,Adiel,Behardien,AB,FOUR OCEANS,G
+riedwaan_patton,WP334,Riedwaan,Patton,RP,FOUR OCEANS,G
+marc_lindsay_christians,WP478,Marc,Lindsay Christians,MC,FOUR OCEANS,M
+azmie_osman,WP635,Azmie,Osman,AO,FOUR OCEANS,M
+ryan_potgieter,WP774,Ryan,Potgieter,RP,FOUR OCEANS,M
+moegamat_faried_van_der_schyff,WP776,Moegamat,Faried Van Der Schyff,MS,FOUR OCEANS,S
+abduraghmaan_daniels,WP795,Abduraghmaan,Daniels,AD,FOUR OCEANS,M
+shamieg_davids,WP857,Shamieg,Davids,SD,FOUR OCEANS,M
+nelson_naidoo,WP878,Nelson,Naidoo,NN,FOUR OCEANS,M
+chad_adams,WP886,Chad,Adams,CA,FOUR OCEANS,S
+justin_calvert,WP981,Justin,Calvert,JC,FOUR OCEANS,S
+mogamat_ghalieb_abbas,WP1091,Mogamat,Ghalieb Abbas,MA,FOUR OCEANS,S
+andre_le_rich,WP1095,Andre,Le Riché,AR,FOUR OCEANS,S
+miguel_antonio_heuvel,WP1097,Miguel,Antonio Heuvel,MH,FOUR OCEANS,S
+tanner_christians,WP1234,Tanner,Christians,TC,FOUR OCEANS,S
+mario_john_noble,WP1232,Mario,John Noble,MN,FOUR OCEANS,M
+fayyaadh_davids,WP1231,Fayyaadh,Davids,FD,FOUR OCEANS,S
+jermaine_rydal_jeftha,WP1236,Jermaine,Rydal Jeftha,JJ,FOUR OCEANS,S
+taydon_jeftha,WP1237,Taydon,Jeftha,TJ,FOUR OCEANS,S
+kyle_clint_koopman,WP1240,Kyle,Clint Koopman,KK,FOUR OCEANS,S
+clayton_toll,WP1262,Clayton,Toll,CT,FOUR OCEANS,S
+shuaa_maggot,WP1264,Shuaa,Maggot,SM,FOUR OCEANS,S
+shaydin_sanka,WP1265,Shaydin,Sanka,SS,FOUR OCEANS,S
+marlin_small,WP1267,Marlin,Small,MS,FOUR OCEANS,S
+chadwin_jason_goldschmidt,WP1268,Chadwin,Jason Goldschmidt,CG,FOUR OCEANS,S
+muneeb_ahmed_mohamed,WP1269,Muneeb,Ahmed Mohamed,MM,FOUR OCEANS,S
+yaaseen_clarke,WP1270,Yaaseen,Clarke,YC,FOUR OCEANS,S
+romario_michael_de_pao,WP1303,Romario,Michael De Pao,RP,FOUR OCEANS,S
+shawn_clark,WP1351,Shawn,Clark,SC,FOUR OCEANS,S
+tylah_christians,WP1352,Tylah,Christians,TC,FOUR OCEANS,S
+jason_luke_maneveld,WP1353,Jason,Luke Maneveld,JM,FOUR OCEANS,S
+hendrik_christiaan_norval,WP1354,Hendrik,Christiaan Norval,HN,FOUR OCEANS,S
+austin_ford,WP1355,Austin,Ford,AF,FOUR OCEANS,S
+zayd_clarke,WP1356,Zayd,Clarke,ZC,FOUR OCEANS,S
+feroz_khan,WP1381,Feroz,Khan,FK,FOUR OCEANS,S

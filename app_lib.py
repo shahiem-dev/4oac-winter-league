@@ -26,7 +26,9 @@ NEW_PAIR_PTS = 5
 BLANK_SESSION_PTS = 5
 SOLO_PENALTY = -10
 
-ANGLER_COLS = ["angler_id", "first_name", "surname", "initials", "club"]
+ANGLER_COLS = ["angler_id", "wp_no", "first_name", "surname", "initials", "club", "division"]
+DIVISIONS = {"G": "GrandMasters", "J": "Juniors", "K": "Kids",
+             "L": "Ladies", "M": "Masters", "S": "Seniors"}
 VENUE_COLS = ["venue", "base_pts", "bonus_species"]
 SESSION_COLS = ["session_id", "round", "date", "angler_id", "venue",
                 "partners", "solo", "photo_url", "notes"]
