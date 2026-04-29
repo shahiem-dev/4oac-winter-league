@@ -239,8 +239,11 @@ def leaderboard(scored: pd.DataFrame, anglers: pd.DataFrame) -> pd.DataFrame:
 # ---- Streamlit helpers --------------------------------------------------
 
 def page_header(title: str, icon: str = "🎣") -> None:
+    from theme import inject_css, render_sidebar_logo
     st.set_page_config(page_title=f"{title} · 4OAC Winter League",
                        page_icon=icon, layout="wide")
+    inject_css()
+    render_sidebar_logo()
     with st.sidebar:
         st.markdown("### 🎣 4OAC Winter League")
         st.caption("May–Aug 2026 · 4 rounds")

@@ -8,7 +8,13 @@ from app_lib import (ROUND_MONTHS, ROUNDS, leaderboard, load_anglers,
                      load_sessions, page_header, score_all)
 
 page_header("4OAC Winter League Tracker")
-st.caption("Off-season program · May–August 2026 · 4 rounds, unlimited sessions per round.")
+
+from theme import render_home_logo
+hcol_logo, hcol_text = st.columns([1, 4], vertical_alignment="center")
+with hcol_logo:
+    render_home_logo(width=200)
+with hcol_text:
+    st.caption("Off-season program · May–August 2026 · 4 rounds, unlimited sessions per round.")
 
 anglers = load_anglers()
 sessions = load_sessions()
