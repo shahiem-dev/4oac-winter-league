@@ -9,12 +9,23 @@ from app_lib import (ROUND_MONTHS, ROUNDS, leaderboard, load_anglers,
 
 page_header("4OAC Winter League Tracker")
 
-from theme import render_home_logo
+from theme import find_logo, render_home_logo, save_logo
 hcol_logo, hcol_text = st.columns([1, 4], vertical_alignment="center")
 with hcol_logo:
     render_home_logo(width=200)
 with hcol_text:
     st.caption("Off-season program · May–August 2026 · 4 rounds, unlimited sessions per round.")
+
+with st.expander("🖼 Upload / replace 4OAC logo", expanded=(find_logo() is None)):
+    up = st.file_uploader("Choose a logo (png, jpg, jpeg, webp)",
+                          type=["png", "jpg", "jpeg", "webp"],
+                          key="home_logo_uploader")
+    if up is not None and st.button("💾 Save logo", type="primary", key="home_logo_save"):
+        out = save_logo(up)
+        st.success(f"Saved to `{out.relative_to(out.parent.parent)}`. Reload to see it.")
+        st.rerun()
+    if find_logo() is None:
+        st.caption("Or drop a file directly at `assets/4oac_logo.png` and refresh.")
 
 anglers = load_anglers()
 sessions = load_sessions()
