@@ -2,8 +2,17 @@
 from __future__ import annotations
 
 import io
+import site
+import sys
 from datetime import datetime
 from pathlib import Path
+
+try:
+    import reportlab  # noqa: F401
+except ModuleNotFoundError:
+    for p in site.getusersitepackages() if isinstance(site.getusersitepackages(), list) else [site.getusersitepackages()]:
+        if p and p not in sys.path:
+            sys.path.insert(0, p)
 
 import pandas as pd
 from reportlab.lib import colors
