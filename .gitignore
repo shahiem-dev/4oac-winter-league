@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+.streamlit/secrets.toml
+exports/
