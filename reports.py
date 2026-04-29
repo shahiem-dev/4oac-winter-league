@@ -134,12 +134,22 @@ def build_fish_detail_xlsx(fish_df: pd.DataFrame) -> bytes:
                             anglers=("angler", "nunique"))
                        .reset_index())
             summary.to_excel(xl, sheet_name="Summary", index=False)
-            # All catches
+            species_overall = (fish_df.groupby(["venue", "species"]).size()
+                               .reset_index(name="count")
+                               .sort_values(["venue", "count"], ascending=[True, False]))
+            species_overall.to_excel(xl, sheet_name="Species by venue", index=False)
             fish_df.to_excel(xl, sheet_name="All catches", index=False)
-            # One sheet per venue
             for venue, sub in fish_df.groupby("venue"):
                 safe = (venue or "Unknown")[:31].replace("/", "-").replace("\\", "-")
-                sub.to_excel(xl, sheet_name=safe, index=False)
+                sp = (sub.groupby("species").size()
+                      .reset_index(name="count")
+                      .sort_values("count", ascending=False))
+                sp.columns = ["Species", "Count"]
+                sp.to_excel(xl, sheet_name=safe, index=False, startrow=0)
+                start = len(sp) + 3
+                pd.DataFrame([["Catches"]]).to_excel(
+                    xl, sheet_name=safe, index=False, header=False, startrow=start - 1)
+                sub.to_excel(xl, sheet_name=safe, index=False, startrow=start)
     return buf.getvalue()
 
 
@@ -186,6 +196,19 @@ def build_fish_detail_pdf(fish_df: pd.DataFrame, theme: dict[str, str] | None = 
         elements.append(Paragraph(f"<b>{venue}</b>", styles["Heading2"]))
         elements.append(Paragraph(f"{len(sub)} catch(es)", styles["Normal"]))
         elements.append(Spacer(1, 0.2 * cm))
+
+        species_counts = (sub.groupby("species").size()
+                          .reset_index(name="Count")
+                          .sort_values("Count", ascending=False)
+                          .rename(columns={"species": "Species"}))
+        elements.append(Paragraph("<b>Species breakdown</b>", styles["Heading4"]))
+        sp_tbl = Table([list(species_counts.columns)] + species_counts.astype(str).values.tolist(),
+                       repeatRows=1, hAlign="LEFT")
+        sp_tbl.setStyle(_table_style(theme))
+        elements.append(sp_tbl)
+        elements.append(Spacer(1, 0.3 * cm))
+
+        elements.append(Paragraph("<b>Catches</b>", styles["Heading4"]))
         sub_view = sub[cols_show].rename(columns=headers_pretty).fillna("")
         data = [list(sub_view.columns)] + sub_view.astype(str).values.tolist()
         tbl = Table(data, repeatRows=1, hAlign="LEFT")
