@@ -34,7 +34,7 @@ SESSION_COLS = ["session_id", "round", "date", "angler_id", "venue",
                 "partners", "solo", "photo_url", "notes", "status"]
 STATUS_ISSUED = "issued"
 STATUS_LOGGED = "logged"
-CATCH_COLS = ["session_id", "species", "length_cm", "notes"]
+CATCH_COLS = ["session_id", "species", "length_cm", "venue", "notes"]
 
 
 # ---- Data IO -------------------------------------------------------------
@@ -166,21 +166,38 @@ def score_session(session: pd.Series,
                   catches: pd.DataFrame,
                   sessions: pd.DataFrame,
                   venues: pd.DataFrame) -> dict:
-    """Return a breakdown dict for a single session row."""
-    venue_row = venues[venues["venue"] == session["venue"]]
-    base = int(venue_row.iloc[0]["base_pts"]) if len(venue_row) else 0
-    bonus_species = venue_row.iloc[0]["bonus_species"] if len(venue_row) else ""
+    """Return a breakdown dict for a single session row.
 
-    sess_catches = catches[catches["session_id"] == session["session_id"]]
+    Multi-venue rules:
+      - Each catch may specify its own venue (falls back to session venue).
+      - Base pts = sum of base_pts over every unique venue fished in this session.
+      - Bonus pts = +50 per fish whose species matches that catch's venue's bonus species.
+    """
+    sess_catches = catches[catches["session_id"] == session["session_id"]].copy()
     n_fish = len(sess_catches)
     fish_pts = PTS_PER_FISH * n_fish
 
-    bonus_caught = (
-        bool(bonus_species)
-        and (sess_catches["species"].str.strip().str.lower()
-             == bonus_species.strip().lower()).any()
+    sess_catches["venue_eff"] = (
+        sess_catches.get("venue", "").astype(str).str.strip()
+        .replace("", session.get("venue", ""))
     )
-    bonus_pts = BONUS_SPECIES_PTS if bonus_caught else 0
+    venues_fished = (sess_catches["venue_eff"].dropna().replace("", pd.NA).dropna().unique().tolist()
+                     if n_fish else
+                     ([session["venue"]] if session.get("venue") else []))
+
+    venue_lookup = {r["venue"]: (int(r["base_pts"]), r["bonus_species"])
+                    for _, r in venues.iterrows()}
+    base = sum(venue_lookup.get(v, (0, ""))[0] for v in venues_fished)
+
+    bonus_count = 0
+    if n_fish:
+        for _, row in sess_catches.iterrows():
+            v = row["venue_eff"]
+            sp = str(row["species"]).strip().lower()
+            bs = venue_lookup.get(v, (0, ""))[1]
+            if bs and sp == bs.strip().lower():
+                bonus_count += 1
+    bonus_pts = BONUS_SPECIES_PTS * bonus_count
 
     partners = parse_partners(session.get("partners", ""))
     n_partners = len(partners)
@@ -190,8 +207,8 @@ def score_session(session: pd.Series,
     new_pair_pts = NEW_PAIR_PTS * n_new
 
     blank_pts = BLANK_SESSION_PTS if n_fish == 0 else 0
-    solo = bool(session.get("solo", False)) or n_partners == 0
-    solo_pts = SOLO_PENALTY if (solo and n_partners == 0) else 0
+    solo = n_partners == 0
+    solo_pts = SOLO_PENALTY if solo else 0
 
     total = base + fish_pts + bonus_pts + partner_pts + new_pair_pts + blank_pts + solo_pts
     return {
@@ -199,13 +216,13 @@ def score_session(session: pd.Series,
         "angler_id": session["angler_id"],
         "round": int(session.get("round", 0) or 0),
         "date": session.get("date", ""),
-        "venue": session.get("venue", ""),
+        "venues": ", ".join(venues_fished),
         "fish": n_fish,
-        "bonus_caught": bonus_caught,
+        "bonus_fish": bonus_count,
         "partners": n_partners,
         "new_pairs": n_new,
         "blank": n_fish == 0,
-        "solo": solo and n_partners == 0,
+        "solo": solo,
         "base_pts": base,
         "fish_pts": fish_pts,
         "bonus_pts": bonus_pts,

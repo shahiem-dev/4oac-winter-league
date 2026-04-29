@@ -107,7 +107,8 @@ with tab_log:
         venue = c2.selectbox("Venue", venue_opts, index=v_idx, key=f"log_venue_{sid}")
 
         v_row = venues[venues["venue"] == venue].iloc[0]
-        st.caption(f"Base **{v_row['base_pts']} pts** · Bonus species: **{v_row['bonus_species']}** (+50)")
+        st.caption(f"Primary venue base **{v_row['base_pts']} pts** · "
+                   f"Bonus species: **{v_row['bonus_species']}** (+50 each).")
 
         partner_ids = [a for a in angler_ids if a != chosen["angler_id"]]
         partners = st.multiselect("Partner(s) on the day", partner_ids,
@@ -118,12 +119,19 @@ with tab_log:
         notes = st.text_area("Notes", height=80, key=f"log_notes_{sid}")
 
         st.markdown("**Catches**")
-        blank = pd.DataFrame({"species": [""], "length_cm": [""], "notes": [""]})
+        st.caption("Set per-catch **venue** if the angler fished more than one spot in this session. "
+                   "Each unique venue fished adds its base points; each fish matching that venue's "
+                   "bonus species earns +50.")
+        blank = pd.DataFrame({"species": [""], "length_cm": [""],
+                              "venue": [venue], "notes": [""]})
         new_catches = st.data_editor(
             blank, num_rows="dynamic", use_container_width=True,
             column_config={
                 "species": st.column_config.TextColumn("Species"),
                 "length_cm": st.column_config.TextColumn("Length (cm)"),
+                "venue": st.column_config.SelectboxColumn(
+                    "Venue", options=venues["venue"].tolist(),
+                    help="Defaults to the session's primary venue."),
                 "notes": st.column_config.TextColumn("Notes"),
             },
             key=f"log_catches_{sid}",

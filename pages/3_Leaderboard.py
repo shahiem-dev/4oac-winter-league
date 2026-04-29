@@ -39,8 +39,8 @@ lookup = {r["angler_id"]: f"{r['first_name']} {r['surname']}".strip()
           for _, r in anglers.iterrows()}
 view = scored.copy()
 view["angler"] = view["angler_id"].map(lambda a: lookup.get(a, a))
-cols = ["session_id", "round", "date", "angler", "venue", "fish",
-        "bonus_caught", "partners", "new_pairs", "blank", "solo",
+cols = ["session_id", "round", "date", "angler", "venues", "fish",
+        "bonus_fish", "partners", "new_pairs", "blank", "solo",
         "base_pts", "fish_pts", "bonus_pts", "partner_pts",
         "new_pair_pts", "blank_pts", "solo_pts", "total_pts"]
 st.dataframe(view[cols].sort_values(["round", "date"]),
