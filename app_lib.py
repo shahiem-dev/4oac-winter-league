@@ -24,7 +24,7 @@ BONUS_SPECIES_PTS = 50
 PARTNER_PTS = 5
 NEW_PAIR_PTS = 5
 BLANK_SESSION_PTS = 5
-SOLO_PENALTY = -10
+SOLO_PENALTY = -50
 
 ANGLER_COLS = ["angler_id", "wp_no", "first_name", "surname", "initials", "club", "division"]
 DIVISIONS = {"G": "GrandMasters", "J": "Juniors", "K": "Kids",

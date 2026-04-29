@@ -32,7 +32,7 @@ streamlit run Home.py
 | Partner on the day | +5 per partner |
 | New partner (first time this league) | +5 per new pair |
 | Blank session (showed up, no fish) | +5 |
-| Solo penalty | -10 |
+| Solo penalty | -50 |
 
 Bonus species per venue:
 - False Bay → Kob

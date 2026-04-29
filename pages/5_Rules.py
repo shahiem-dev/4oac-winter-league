@@ -13,7 +13,7 @@ st.markdown("""
 - **Period:** May–August 2026 — 4 rounds, one per month.
 - **Sessions:** Unlimited per round, all points accumulate.
 - **Self-nominated:** Angler picks day and venue in advance; admin issues a session code.
-- **Solo allowed** but carries a **-10 point** penalty.
+- **Solo allowed** but carries a **-50 point** penalty (strong disincentive — pair up where possible).
 - **Catch proof:** photo with session card visible, submitted within 24 hours.
 
 ## Scoring
@@ -31,7 +31,7 @@ st.markdown("""
 | Partner on the day | **+5 per partner** |
 | New partner (first time this league) | **+5 per new pair** |
 | Blank session (showed up, no fish) | **+5** |
-| Solo penalty | **-10** |
+| Solo penalty | **-50** |
 
 ## Session code format
 

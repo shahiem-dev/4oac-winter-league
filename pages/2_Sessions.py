@@ -113,8 +113,13 @@ with tab_log:
         partner_ids = [a for a in angler_ids if a != chosen["angler_id"]]
         partners = st.multiselect("Partner(s) on the day", partner_ids,
                                   format_func=lambda a: lookup.get(a, a),
-                                  help="Leave empty for solo (-10).",
+                                  help="Leave empty if fishing solo.",
                                   key=f"log_partners_{sid}")
+        if not partners:
+            st.warning("⚠ **Solo session** — a -50 penalty will apply.")
+        else:
+            st.success(f"👥 Fishing with {len(partners)} partner(s) — +5 each, "
+                       "+5 bonus per first-time pairing.")
         photo_url = st.text_input("Photo proof URL", key=f"log_photo_{sid}")
         notes = st.text_area("Notes", height=80, key=f"log_notes_{sid}")
 
