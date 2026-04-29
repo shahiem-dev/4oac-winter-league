@@ -31,7 +31,9 @@ DIVISIONS = {"G": "GrandMasters", "J": "Juniors", "K": "Kids",
              "L": "Ladies", "M": "Masters", "S": "Seniors"}
 VENUE_COLS = ["venue", "base_pts", "bonus_species"]
 SESSION_COLS = ["session_id", "round", "date", "angler_id", "venue",
-                "partners", "solo", "photo_url", "notes"]
+                "partners", "solo", "photo_url", "notes", "status"]
+STATUS_ISSUED = "issued"
+STATUS_LOGGED = "logged"
 CATCH_COLS = ["session_id", "species", "length_cm", "notes"]
 
 
@@ -74,6 +76,7 @@ def load_sessions() -> pd.DataFrame:
     df = _read(SESSIONS_CSV, SESSION_COLS)
     df["round"] = pd.to_numeric(df["round"], errors="coerce").fillna(0).astype(int)
     df["solo"] = df["solo"].astype(str).str.lower().isin(["true", "1", "yes", "y"])
+    df["status"] = df["status"].fillna("").replace("", STATUS_LOGGED)
     return df
 
 
@@ -135,6 +138,26 @@ def make_session_code(round_no: int, initials: str, sessions: pd.DataFrame) -> s
         if code not in sessions["session_id"].values:
             return code
         n += 1
+
+
+def issue_code(angler_id: str, round_no: int,
+               planned_date: str = "", planned_venue: str = "") -> str:
+    """Reserve a session code for an angler. Stub row written to sessions.csv."""
+    anglers = load_anglers()
+    sessions = load_sessions()
+    row = anglers[anglers["angler_id"] == angler_id]
+    if row.empty:
+        raise ValueError(f"Unknown angler: {angler_id}")
+    initials = row.iloc[0]["initials"] or "XX"
+    code = make_session_code(int(round_no), initials, sessions)
+    new_row = pd.DataFrame([{
+        "session_id": code, "round": int(round_no),
+        "date": planned_date, "angler_id": angler_id,
+        "venue": planned_venue, "partners": "", "solo": False,
+        "photo_url": "", "notes": "", "status": STATUS_ISSUED,
+    }])
+    save_sessions(pd.concat([sessions, new_row], ignore_index=True))
+    return code
 
 
 # ---- Scoring engine -----------------------------------------------------
@@ -218,8 +241,12 @@ def score_all(sessions: pd.DataFrame | None = None,
     venues = venues if venues is not None else load_venues()
     if sessions.empty:
         return pd.DataFrame()
+    # Only logged sessions accrue points; issued-but-unlogged stubs are skipped.
+    logged = sessions[sessions["status"] == STATUS_LOGGED]
+    if logged.empty:
+        return pd.DataFrame()
     rows = [score_session(r, catches, sessions, venues)
-            for _, r in sessions.sort_values("date").iterrows()]
+            for _, r in logged.sort_values("date").iterrows()]
     return pd.DataFrame(rows)
 
 
