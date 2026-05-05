@@ -7,14 +7,19 @@ import streamlit as st
 from app_lib import (ROUND_MONTHS, ROUNDS, leaderboard, load_anglers,
                      load_sessions, page_header, score_all)
 
-page_header("4OAC Winter League Tracker")
+page_header("4OAC Winter League", show_title=False)
 
 from theme import find_logo, render_home_logo, save_logo
-hcol_logo, hcol_text = st.columns([1, 4], vertical_alignment="center")
+hcol_logo, hcol_text = st.columns([1, 5], vertical_alignment="center")
 with hcol_logo:
-    render_home_logo(width=200)
+    render_home_logo(width=180)
 with hcol_text:
-    st.caption("Off-season program · May–August 2026 · 4 rounds, unlimited sessions per round.")
+    st.markdown(
+        "<h1 style='font-size:2.6rem; margin:0; color:#0B2545;'>4OAC Winter League</h1>"
+        "<p style='font-size:1rem; margin:6px 0 0; color:#555;'>"
+        "Off-season program · May–August 2026 · 4 rounds, unlimited sessions per round.</p>",
+        unsafe_allow_html=True,
+    )
 
 with st.expander("🖼 Upload / replace 4OAC logo", expanded=(find_logo() is None)):
     up = st.file_uploader("Choose a logo (png, jpg, jpeg, webp)",

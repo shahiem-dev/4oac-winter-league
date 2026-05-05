@@ -1,2 +1,5 @@
-session_id,round,date,angler_id,venue,partners,solo,photo_url,notes,status
-WL-R1-SA-001,1,2026-05-01,shahiem_adams,False Bay,adiel_behardien;azmie_osman,false,,,logged
+session_id,round,date,start_time,angler_id,venue,partners,solo,late_submission,photo,notes,status
+WL-R1-SA-001,1,2026-05-01,,shahiem_adams,False Bay,adiel_behardien;azmie_osman,false,,,,logged
+WL-R1-MC-001,1,2026-05-04,,marc_lindsay_christians,False Bay,,false,,,,issued
+WL-R1-SA-002,1,2026-05-04,,shahiem_adams,False Bay,,false,,,,issued
+WL-R1-AO-001,1,2026-05-04,,azmie_osman,False Bay,,false,,,,issued
